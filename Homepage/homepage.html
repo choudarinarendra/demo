@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./homepage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
+</head>
+<body>
+    <section>
+        <article>
+            <header id="header_part">
+                <div>
+                <h1 id="welcome">WELCOME TO JSPIDERS PUNJAGUTTA</h1>
+                <span><img id="jsp_logo" src="./logo_jspiders.png" alt="jspLogo"></span>
+                </div>
+                <div>
+                <table border="" id="table" cellpadding="10px">
+                    <th>
+                        <span class="thclass">About</span>
+                        <select id="aboutselect" onclick="onclickAbout()" onchange="onchangeService()">
+                            <option selected hidden></option>
+                            <option value="JSPIDERS">JSPIDERS</option>
+                            <option value="CEO">CEO</option>
+                            <option value="FACULTIES">FACULTIES</option>
+                            
+                        </select>
+                    </th>
+                    <th><span class="thclass">Service</span>
+                        <select name="" id="serviceselect">
+                            <option selected hidden></option>
+                            <option value="">java fullStack</option>
+                            <option value="">python fullStack</option>
+                            
+                        </select>
+                    </th>
+                    <th><span class="thclass">contacts</span></th>
+                </table>
+                <input type="button" value="signup" id="signuobtn" onclick="signUpClick()">
+                </div>
+
+            </header>
+            <main id="main1">
+                <div id="mainid">
+                      <h1 id="mainh1">LARGEST SOFTWARE TRAINING ORGANISATION </h1>
+                      <p>JSpiders is the world’s ace software course training organization with an aim to bridge the gap between the demands of the industry and the curriculum of educational institutions.</p>
+                      
+                      <p>
+                        With centers across the Globe, the institute is a platform where young minds are given the opportunity to build successful careers.
+                      </p>
+                      <p>
+                        <q>JSpiders is a place where businesses find talent and dreams take flight.</q>
+                      </p>
+                      
+                </div>
+            </main>
+        </article>
+    </section>
+    <script src="./homepage.js"></script>
+</body>
+</html>
