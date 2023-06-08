@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./registerPage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <section id="section_part">
+        <center>
+            <h1 id="resi_h1">Register Form</h1>
+            <br>
+            <h1 id="success"></h1>
+            <div id="Login_div_form">
+               
+               <form action="" id="form" onsubmit="registerfu()">
+                <!-- <h1 id="success"></h1> -->
+                
+                <span id="id_error"></span><br>
+                <input  id="user_id" name="id" type="text" placeholder="Enter User_Id " size="10">
+                <br>
+                <br>
+                <span id="name_error"></span>
+                <br>
+                <input id="user_name"name="name" type="text" placeholder="Enter User_Name " size="33">
+                <br>
+                <br>
+                <span id="email_error"></span>
+                <br>
+                <input id="user_email" name="email" type="email" placeholder="Enter User Email " size="33">
+                <br>
+                <br>
+                <span id="number_error"></span>
+                <br>
+                <input id="user_phone" name="phno" type="number" placeholder="Enter User Phone No" size="10">
+                <br>
+                <br>
+                <span id="pass_error"></span>
+                <br>
+                <input id="user_password" name="password" type="password" placeholder="Enter User Password " range="11" size="30" maxlength="15"><i id="eye_close" class="fa-solid fa-eye"></i>
+                <br>
+                <br>
+                <span id="conpass_error" ></span>
+                <br>
+                <input id="con_pass" type="password" name="confirmPassword" placeholder="Enter confirm code " size="30"><i id="conform_close" class="fa-solid fa-eye"></i>
+                <br>
+                <br>
+                <button id="sub_btn">Submit</button> <span>OR</span> <button id="log_btn"><a href="http://127.0.0.1:5500/LoginPage/loginpage.html">Login Page</a></button> 
+                <br>
+                <br>
+               </form>
+            </div>
+        </center>
+    </section>
+    <script src="./register.js"></script>
+</body>
+</html>

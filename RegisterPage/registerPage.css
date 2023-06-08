@@ -1,0 +1,55 @@
+#section_part{
+    position: sticky;
+}
+#Login_div_form{
+    width: 40%;
+    border: 2px solid ;
+    position: relative;
+    top: 30px;
+    box-shadow: 5px 5px  5px 5px slategrey;
+    background-color: white;
+    
+    
+}
+#resi_h1{
+    position: relative;
+    top: 40px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    color:yellowgreen;
+}
+input{
+    text-align: center;
+    outline: none;
+  border: 2px solid;
+    border-radius: 5px;
+    height: 25px;
+   
+}
+#sub_btn{
+    background-color: blue;
+    color: white;
+    height: 30px;
+}
+#log_btn{
+    background-color: blue;
+    color: white;
+    height: 30px;
+}
+body{
+    background-color:rgb(28, 28, 85)
+}
+#eye_close{
+    position: relative;
+    right: 25px;
+    color: rgb(219, 211, 211);
+}
+#conform_close{
+    position: relative;
+    right: 25px;
+    color: rgb(219, 211, 211);
+}
+a{
+    text-decoration: none;
+    color: white;
+}
