@@ -249,7 +249,7 @@ background-color:rgb(255, 225, 114);
         color: green;
     }
     #remove_updateUser{
-        position: sticky;
+        position: fixed;
         top: 0px;
     }
     #update_form{
@@ -257,10 +257,10 @@ background-color:rgb(255, 225, 114);
         background-color:bisque;
         
     }
-    #Login_div_form{
-        position: relative;
+    /* #Login_div_form{
+        position: ;
         top:0px;
-    }
+    } */
     
     input{
         text-align: center;

@@ -1,8 +1,8 @@
 let student_value=document.getElementsByClassName("student_values")
 
-student_value[0].textContent=`${localStorage.getItem("id")}`
-student_value[1].textContent=`${localStorage.getItem("name")}`
-let ph=localStorage.getItem("number")
+student_value[0].textContent=`${sessionStorage.getItem("id")}`
+student_value[1].textContent=`${sessionStorage.getItem("name")}`
+let ph=sessionStorage.getItem("phno")
 student_value[2].textContent=(`${ph.slice(0,2)}`+"*******"+`${ph.slice(0.-2)}`)
 
 /* ------------------------------------create Amount process-------------------------   */ 
@@ -90,9 +90,9 @@ function onClickSelect(){
    </span>`
    let student_value=document.getElementsByClassName("student_values")
 
-student_value[0].textContent=`${localStorage.getItem("id")}`
-student_value[1].textContent=`${localStorage.getItem("name")}`
-let ph=localStorage.getItem("number")
+   student_value[0].textContent=`${sessionStorage.getItem("id")}`
+   student_value[1].textContent=`${sessionStorage.getItem("name")}`
+   let ph=sessionStorage.getItem("phno")
 student_value[2].textContent=(`${ph.slice(0,2)}`+"*******"+`${ph.slice(0.-2)}`)
  }
 
@@ -211,15 +211,72 @@ function onsubmitUpdate(){
    let form=document.getElementById("form_update")
    let formdata=new  FormData(form);
    let obj=Object.fromEntries(formdata)
-   console.log(obj);
+   
    obj.minBal=Number(obj.minBal)
    obj.amount=Number(obj.amount)
-   delete obj.confirmPassword
-   let json=JSON.stringify(obj)
-   console.log(json);
+   let  validate_password=updateUserPassword(obj.password)
+  let validate_con_pass =updateUserConfirmPassword(obj.confirmPassword,obj.password)
+  let  validate_amount=updateUserAmount(obj.amount,obj.minBal)
+  if(validate_password && validate_con_pass && validate_amount){
+    delete obj.confirmPassword
+    let jsonform=JSON.stringify(obj)
+    console.log(jsonform);
+  }
 
    
 }
+function updateUserPassword(password){
+    passwordElement=document.getElementById("pass_user_create_Account")
+    if(password.length>5){
+        passwordElement.style.border=''
+        return true
+    }else{
+        passwordElement.style.border='2px solid red'
+        return false
+    }
+    
+    }
+    
+    function updateUserConfirmPassword(confirmPassword,password){
+        let confirmPasswordElement=document.getElementById("con_pass_user_create_Account")
+        if(confirmPassword===password&& confirmPassword!==""){
+            confirmPasswordElement.style.border=""
+            return true
+           }
+           else{
+            confirmPasswordElement.style.border="2px solid red"
+            return false
+           }
+    }
+    function updateUserAmount(amount,minBal){
+        if(minBal===0&&amount !=""){
+            if(amount>=0){
+              return true
+            }else{
+                window.alert("it does not allow negativevalues")
+            }
+        }else if(minBal===100&&amount !=""){
+             if(amount>=100){
+                return true
+             }else{
+                window.alert("Amount should minimum 100 rupes")
+             }
+        }
+        else if(minBal===1000&&amount !=""){
+             if(amount>=1000){
+                return true
+             }else{
+                window.alert("Amount  should minimum 1000 rupes")
+             }
+        }
+        else if(minBal===10000&&amount !=""){
+            if(amount>=10000){
+                return true
+            }else{
+               window.alert("Amount  should minimum 10000 rupes")
+            }
+       }
+    }
 
 /*----------------------------- delete Account----------------------------------*/
 document.getElementById("delete_Account").addEventListener('click',()=>{
@@ -369,20 +426,165 @@ function eyeclosePasswordDelete(){
             </div>
            
         `
+        // let id=document.getElementById("user_id")
+        //   id.value=
         
           })
+          let errorObjectUser={
+            id:false,
+            name:false,
+            email:false,
+            phno:false,
+            password:false,
+            conPass:false
+
+          }
 
        function updateUserOnSubmit(){
         event.preventDefault()
         let UserForm=document.getElementById("update_form")
         let formdata= new FormData(UserForm)
         let obj= Object.fromEntries(formdata)
-        obj.id=Number(obj.id)
-        obj.phno=Number(obj.phno)
-        delete obj.confirmPassword
-        let json=JSON.stringify(obj)
-        console.log(json);
+        
+       
+        let idElement=document.getElementById("user_id")
+        let nameElement=document.getElementById("user_name")
+        let emailElement=document.getElementById("user_email")
+        let phnoElement=document.getElementById("user_phone")
+        let passElement=document.getElementById("user_password")
+        let pass_conElement=document.getElementById("con_pass")
+        errorObjectUser.id =User_id(obj.id,idElement)
+         errorObjectUser.name =User_name(obj.name,nameElement)
+         errorObjectUser.phno=User_number(obj.phno,phnoElement)
+          errorObjectUser.email=User_email(obj.email,emailElement)
+          errorObjectUser.password=User_password(obj.password,passElement)
+          errorObjectUser.conPass= User_con_password(obj.confirmPassword,pass_conElement,obj.password)
+         let errorConfirm=!Object.values(errorObjectUser).includes(false)
+         if(errorConfirm){
+            
+           
+            delete obj.confirmPassword
+            obj.id=Number(obj.id)
+            obj.phno=Number(obj.phno)
+            let jsonform=JSON.stringify(obj)
+            let fet=fetch("http://localhost:8080/users",{
+                method:"PUT",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                body:jsonform
+                
+            })
+           fet.then((x)=>x.json())
+           .then((x)=>{
+            sessionStorage.setItem("name",x.name)
+            sessionStorage.setItem("email",x.email)
+            sessionStorage.setItem("password",x.password)
+            sessionStorage.setItem("phno",x.phno)
+            sessionStorage.setItem("id",x.id)
+            idElement.value=""
+            nameElement.value=""
+            emailElement.value=""
+            phnoElement.value=""
+            passElement.value=""
+            pass_conElement.value=""
+           })
+           
+         }
        }
+       function User_id(id_value,id_element){
+        if(id_value !==""){
+            let id_Error=document.getElementById("id_error")
+            id_Error.textContent=""
+            id_Error.style.color="none";
+            id_element.style.border="2px solid"
+            return errorObjectUser.id=true
+        }else{
+           let id_Error=document.getElementById("id_error")
+            id_Error.textContent="Please Enter Id"
+            id_Error.style.color="red";
+            id_element.style.border="2px solid red"
+            return errorObjectUser.id=false
+        }
+    }
+    
+    function User_name(name_value,name_element){
+        if(name_value.length>3){
+            let name_Error=document.getElementById("name_error")
+            name_Error.textContent=""
+            name_Error.style.color="";
+            name_element.style.border="2px solid "
+            return errorObjectUser.name=true
+        }else{
+           let name_Error=document.getElementById("name_error")
+            name_Error.textContent="Please Enter name"
+            name_Error.style.color="red";
+            name_element.style.border="2px solid red"
+            return errorObjectUser.name=false
+        }
+    }
+    function User_number(number_value,number_element){
+        if(number_value.length===10){
+            let number_Error=document.getElementById("number_error")
+            number_Error.textContent=""
+            number_Error.style.color="";
+            number_element.style.border="2px solid "
+             return errorObjectUser.phno=true
+        }else{
+            let number_Error=document.getElementById("number_error")
+            number_Error.textContent="Please Enter number"
+            number_Error.style.color="red";
+            number_element.style.border="2px solid red"
+            return errorObjectUser.phno=false
+        }
+    }
+    function User_email(email_value,email_element){
+        if(email_value !=="" && email_value.slice(0.-10)=='@gmail.com'){
+            let email_Error=document.getElementById("email_error")
+            email_Error.textContent=""
+            email_Error.style.color="";
+            email_element.style.border="2px solid "
+            return errorObjectUser.email=true
+        }else{
+           let email_Error=document.getElementById("email_error")
+            email_Error.textContent="Please Enter email"
+            email_Error.style.color="red";
+            email_element.style.border="2px solid red"
+            return errorObjectUser.email=false
+            
+        }
+    }
+    function User_password(password_value,password_element){
+        if(password_value.length>5){
+            let password_Error=document.getElementById("pass_error")
+            password_Error.textContent=""
+            password_Error.style.color="";
+            password_element.style.border="2px solid"
+            return errorObjectUser.password=true
+        }else{
+            let password_Error=document.getElementById("pass_error")
+            password_Error.textContent="Please Enter Password"
+            password_Error.style.color="red";
+            password_element.style.border="2px solid red"
+            return errorObjectUser.password=false
+        }
+    }
+    function User_con_password(password_value,conform_element,conform_pass){
+        if(conform_pass===password_value&&conform_pass!==""&&conform_pass.length>5){
+            let conpass_Error=document.getElementById("conpass_error")
+            conpass_Error.textContent=""
+            conpass_Error.style.color="";
+            conform_element.style.border="2px solid"
+            return errorObjectUser.conPass=true
+        }else{
+            let conpass_Error=document.getElementById("conpass_error")
+            conpass_Error.textContent=" Password mismatch"
+            conpass_Error.style.color="red";
+            conform_element.style.border="2px solid red"
+            return errorObjectUser.conPass=false
+        }
+    }
+    
        function onmouseDownupdate(){
         let password=document.getElementById("user_password")
         password.removeAttribute("type")
