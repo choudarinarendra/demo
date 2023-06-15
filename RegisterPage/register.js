@@ -39,16 +39,24 @@ function registerfu() {
        delete obj.confirmPassword
        let jsonform=JSON.stringify(obj)
        console.log(jsonform);
-    //    let password_Add=password.value
-    //    let email_Add=email.value
-    //    let number_Add=number.value
-    //    let id_Add=id.value
-    //    let name_Add=name.value
-    //    localStorage.setItem("email",email_Add)
-    //    localStorage.setItem("password",password_Add)
-    //    localStorage.setItem("name",name_Add)
-    //    localStorage.setItem("id",id_Add)
-    //    localStorage.setItem("number",number_Add)
+       let fe=fetch("http://localhost:8080/users",{
+        method: "POST", 
+       
+        headers: {
+            "Content-Type": "application/json",
+           
+          },
+       
+          body: jsonform,
+       })
+       fe.then((x)=>x.json())
+       .then((x)=>{
+        console.log(x);
+       })
+       .catch((x)=>{
+        console.log(x);
+       })
+    
     
 
        id.value=""
