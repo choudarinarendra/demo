@@ -38,7 +38,7 @@ function registerfu() {
        obj.phno=Number(obj.phno)
        delete obj.confirmPassword
        let jsonform=JSON.stringify(obj)
-       console.log(jsonform);
+       
        let fe=fetch("http://localhost:8080/users",{
         method: "POST", 
        
