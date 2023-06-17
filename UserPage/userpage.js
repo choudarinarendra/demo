@@ -1,3 +1,4 @@
+ 
 let student_value=document.getElementsByClassName("student_values")
 
 student_value[0].textContent=`${sessionStorage.getItem("id")}`
@@ -76,8 +77,31 @@ function onClickSelect(){
  if(validate_password && validate_con_pass && validate_amount){
     console.log(obj);
     delete obj.conformPassword
+   
      let json=JSON.stringify(obj)
      console.log(json);
+     let fet=fetch("http://localhost:8080/accounts",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            
+        },
+        body:json
+     })
+     fet.then((x)=>x.json())
+     .then((x)=>{
+      let fet1 = fetch(`http://localhost:8080/accounts/${x.id}`)
+      fet1.then((x1)=>x1.json())
+        .then((x1)=>{
+            sessionStorage.setItem("AccountId",x1.id)
+            sessionStorage.setItem("AccNo",x1.accNo)
+            sessionStorage.setItem("minBal",x1.minBal)
+            sessionStorage.setItem("intAmt",x1.intAmt)
+            sessionStorage.setItem("amount",x1.amount)
+            sessionStorage.setItem("accountPass",x1.password)
+        })
+     })
+
     document.getElementById("user_details").innerHTML=`<span id="user_remove">
     <div id="div_circle">
    <i id="user_icon" class="fa-sharp fa-solid fa-user-tie fa-5x"></i>
@@ -156,8 +180,8 @@ function createUserAmount(amount,minBal){
 document.getElementById("get_Account").addEventListener('click',()=>{
     let user_details=document.getElementById("user_details")
     user_details.setAttribute("class","User_details_class")
-    let amount=localStorage.getItem("amount");
-    if (amount=='') {
+    let amount=sessionStorage.getItem("amount");
+    if (amount==null) {
         document.getElementById("user_details").innerHTML=` <div id="remove_getAmount">
         
         <h1 id="getId_error_messane">
@@ -175,11 +199,11 @@ document.getElementById("get_Account").addEventListener('click',()=>{
     <p class="get_User_details">Amount:<span class="get_User_values"></span></p>
 </div>`
     let user_getvalues=document.getElementsByClassName("get_User_values")
-    user_getvalues[0].textContent=`${localStorage.getItem("id")}`
-    user_getvalues[1].textContent=`${localStorage.getItem("name")}`
-    user_getvalues[2].textContent=`${localStorage.getItem("number")}`
-    user_getvalues[3].textContent="SBI********007"
-    user_getvalues[4].textContent=`${localStorage.getItem("amount")}`
+    user_getvalues[0].textContent=`${sessionStorage.getItem("id")}`
+    user_getvalues[1].textContent=`${sessionStorage.getItem("name")}`
+    user_getvalues[2].textContent=`${sessionStorage.getItem("phno")}`
+    user_getvalues[3].textContent=`${sessionStorage.getItem("AccNo")}`
+    user_getvalues[4].textContent=`${sessionStorage.getItem("amount")}`
     }
 })
 /*------------------------upadte Account------------------------------------ */
@@ -390,7 +414,7 @@ function eyeclosePasswordDelete(){
               
                 
                 <span id="id_error"></span><br>
-                <input  id="user_id" name="id" type="text" placeholder="Enter User_Id " size="10">
+                <input  id="user_id" name="id" type="text" placeholder="Enter User_Id " size="10" readonly>
                 <br>
                 <br>
                 <span id="name_error"></span>
@@ -426,8 +450,13 @@ function eyeclosePasswordDelete(){
             </div>
            
         `
-        // let id=document.getElementById("user_id")
-        //   id.value=
+         let idEle=document.getElementById("user_id")
+         idEle.value=sessionStorage.getItem("id")
+         document.getElementById("user_name").value=sessionStorage.getItem("name")
+         document.getElementById("user_email").value=sessionStorage.getItem("email")
+         document.getElementById("user_phone").value=sessionStorage.getItem("phno")
+         document.getElementById("user_password").value=sessionStorage.getItem("password")
+        
         
           })
           let errorObjectUser={
@@ -467,6 +496,7 @@ function eyeclosePasswordDelete(){
             obj.id=Number(obj.id)
             obj.phno=Number(obj.phno)
             let jsonform=JSON.stringify(obj)
+            console.log(jsonform);
             let fet=fetch("http://localhost:8080/users",{
                 method:"PUT",
                 headers:{
