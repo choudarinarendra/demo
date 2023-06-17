@@ -42,11 +42,18 @@ form.addEventListener("submit" , (e) => {
         sessionStorage.setItem("password",x.password)
         sessionStorage.setItem("phno",x.phno)
         sessionStorage.setItem("id",x.id)
+        if(x.account!==null){
+          sessionStorage.setItem("AccountId",x.account.id)
+          sessionStorage.setItem("AccNo",x.account.accNo)
+          sessionStorage.setItem("minBal",x.account.minBal)
+          sessionStorage.setItem("intAmt",x.account.intAmt)
+          sessionStorage.setItem("amount",x.account.amount)
+          sessionStorage.setItem("accountPass",x.account.password)
+        }
         window.open("../UserPage/userpage.html")
          }
          else{
-          let emailValue=document.getElementById("log_email")
-          let passwordValue=document.getElementById("log_pass")
+          
          }
        })
        .catch((x)=>{
