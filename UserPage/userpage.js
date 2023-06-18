@@ -1,8 +1,8 @@
  
 let student_value=document.getElementsByClassName("student_values")
 
-student_value[0].textContent=`${sessionStorage.getItem("id")}`
-student_value[1].textContent=`${sessionStorage.getItem("name")}`
+student_value[0].textContent=sessionStorage.getItem("id")
+student_value[1].textContent=sessionStorage.getItem("name")
 let ph=sessionStorage.getItem("phno")
 student_value[2].textContent=(`${ph.slice(0,2)}`+"*******"+`${ph.slice(0.-2)}`)
 
@@ -77,10 +77,11 @@ function onClickSelect(){
  if(validate_password && validate_con_pass && validate_amount){
     console.log(obj);
     delete obj.conformPassword
-   
+    
      let json=JSON.stringify(obj)
      console.log(json);
-     let fet=fetch("http://localhost:8080/accounts",{
+     console.log(sessionStorage.getItem("id"));
+     let fet=fetch(`http://localhost:8080/accounts/${Number(sessionStorage.getItem("id"))}`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json",
@@ -91,6 +92,7 @@ function onClickSelect(){
      fet.then((x)=>x.json())
      .then((x)=>{
       let fet1 = fetch(`http://localhost:8080/accounts/${x.id}`)
+      console.log(typeof x.id);
       fet1.then((x1)=>x1.json())
         .then((x1)=>{
             sessionStorage.setItem("AccountId",x1.id)
@@ -114,8 +116,8 @@ function onClickSelect(){
    </span>`
    let student_value=document.getElementsByClassName("student_values")
 
-   student_value[0].textContent=`${sessionStorage.getItem("id")}`
-   student_value[1].textContent=`${sessionStorage.getItem("name")}`
+   student_value[0].textContent=sessionStorage.getItem("id")
+   student_value[1].textContent=sessionStorage.getItem("name")
    let ph=sessionStorage.getItem("phno")
 student_value[2].textContent=(`${ph.slice(0,2)}`+"*******"+`${ph.slice(0.-2)}`)
  }
@@ -199,19 +201,28 @@ document.getElementById("get_Account").addEventListener('click',()=>{
     <p class="get_User_details">Amount:<span class="get_User_values"></span></p>
 </div>`
     let user_getvalues=document.getElementsByClassName("get_User_values")
-    user_getvalues[0].textContent=`${sessionStorage.getItem("id")}`
-    user_getvalues[1].textContent=`${sessionStorage.getItem("name")}`
-    user_getvalues[2].textContent=`${sessionStorage.getItem("phno")}`
-    user_getvalues[3].textContent=`${sessionStorage.getItem("AccNo")}`
-    user_getvalues[4].textContent=`${sessionStorage.getItem("amount")}`
+    user_getvalues[0].textContent=sessionStorage.getItem("id")
+    user_getvalues[1].textContent=sessionStorage.getItem("name")
+    user_getvalues[2].textContent=sessionStorage.getItem("phno")
+    user_getvalues[3].textContent=sessionStorage.getItem("AccNo")
+    user_getvalues[4].textContent=sessionStorage.getItem("amount")
     }
 })
 /*------------------------upadte Account------------------------------------ */
 document.getElementById("update_Account").addEventListener("click",()=>{
     let user_details=document.getElementById("user_details")
     user_details.setAttribute("class","User_details_class")
+    let amount=sessionStorage.getItem("amount");
+    if (amount==null) {
+        document.getElementById("user_details").innerHTML=` <div id="remove_getAmount">
+        
+        <h1 id="update_error_messane">
+            Please Create your Account
+        </h1>
+       </div>`
+    }else{
     document.getElementById("user_details").innerHTML=`<div id="remove_updateUser">
-    <p id="update_acc_col">Account NO: <span id="update_details_color">SBI******007</span></p>
+    <p id="update_acc_col">Account NO: <span id="update_details_color"></span></p>
     <form action="" id="form_update" onsubmit="onsubmitUpdate()">
        <select name="minBal" id="select_user" onclick="onClickSelect()">
        <option selected hidden>MINIMUM TRANSACTION</option>
@@ -229,6 +240,8 @@ document.getElementById("update_Account").addEventListener("click",()=>{
        </form>
 
   </div>`
+  document.getElementById("update_details_color").textContent=sessionStorage.getItem("AccNo")
+    }
 })
 function onsubmitUpdate(){
     event.preventDefault()
@@ -238,15 +251,42 @@ function onsubmitUpdate(){
    
    obj.minBal=Number(obj.minBal)
    obj.amount=Number(obj.amount)
+   obj.id=Number(sessionStorage.getItem("AccountId"))
+//    obj.intAmt=Number(sessionStorage.getItem("intAmt"))
+   
+   obj.accNo=sessionStorage.getItem("AccNo")
    let  validate_password=updateUserPassword(obj.password)
   let validate_con_pass =updateUserConfirmPassword(obj.confirmPassword,obj.password)
   let  validate_amount=updateUserAmount(obj.amount,obj.minBal)
   if(validate_password && validate_con_pass && validate_amount){
     delete obj.confirmPassword
     let jsonform=JSON.stringify(obj)
-    console.log(jsonform);
-  }
+    let fet11=fetch(`http://localhost:8080/accounts/${Number(sessionStorage.getItem("id"))}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+            
+        },
+        body:jsonform
+     })
+     fet11.then((x)=>x.json())
+  .then((x)=>{
+    sessionStorage.setItem("AccountId",x.id)
+    sessionStorage.setItem("AccNo",x.accNo)
+    sessionStorage.setItem("minBal",x.minBal)
+    sessionStorage.setItem("intAmt",x.intAmt)
+    sessionStorage.setItem("amount",x.amount)
+    sessionStorage.setItem("accountPass",x1.password)
+  })
+    document.getElementById("pass_user_create_Account").value="" 
+    document.getElementById("con_pass_user_create_Account").value="" 
+    document.getElementById("user_create_Account").value="" 
+    document.getElementById("select_user").value="0"
+    document.getElementById("update_details_color").textContent=sessionStorage.getItem("AccNo")
 
+    
+  }
+  
    
 }
 function updateUserPassword(password){
@@ -306,24 +346,35 @@ function updateUserPassword(password){
 document.getElementById("delete_Account").addEventListener('click',()=>{
     let user_details=document.getElementById("user_details")
     user_details.setAttribute("class","User_details_class")
+    let amount=sessionStorage.getItem("amount");
+    if (amount==null) {
+        document.getElementById("user_details").innerHTML=` <div id="delete_account_div">
+        
+        <h1 id="delete_error_messane">
+            Please Create your Account
+        </h1>
+       </div>`
+    }else{
     document.getElementById("user_details").innerHTML=`<div id="delete_account_div">
-    <form action="">
+    <form  id="delete-form" onsubmit="onclickDelete()">
       <br>
       <br>
       <input id="delete_account_number" class="delete_inputs"  type="text" placeholder="Enter Account NO"><br><br>
-      <input id="delete_account_password" class="delete_inputs"   type="password" placeholder="Enter Your Password"><i onmousedown="eyeOpenePasswordDelete()" onmouseup="eyeclosePasswordDelete()" id="eye_close_delete" class="fa-solid fa-eye"></i> <br><br>
-      <input id="delete_btn" type="button" onclick="onclickDelete()" value="DELETE">
+      <input id="delete_account_password" class="delete_inputs"   type="password" placeholder="Enter Your Password"><i onmousedown="eyeOpenePassword()" onmouseup="eyeclosePassword()" id="eye_close" class="fa-solid fa-eye"></i> <br><br>
+    
+      <button id="delete_btn">DELETE</button>
     </form>
    </div>`
+    }
 })
-function eyeOpenePasswordDelete(){
+function eyeOpenePassword(){
     let password=document.getElementById("delete_account_password")
     password.removeAttribute("type")
     password.setAttribute("type","text")
     let openEye=document.getElementById("eye_close")
     openEye.setAttribute("class","fa-solid fa-eye-slash")
 }
-function eyeclosePasswordDelete(){
+function eyeclosePassword() {
     let password=document.getElementById("delete_account_password")
     password.removeAttribute("type")
     password.setAttribute("type","password")
@@ -331,8 +382,41 @@ function eyeclosePasswordDelete(){
     openEye.setAttribute("class","fa-solid fa-eye")
 }
  function onclickDelete(){
-   let confirm =window.confirm("delete your account")
-   console.log(confirm);
+  event.preventDefault();
+  let accountNo=document.getElementById("delete_account_number")
+  let password=document.getElementById("delete_account_password")
+  let sess_account=sessionStorage.getItem("AccNo")
+  let sess_pass=sessionStorage.getItem("accountPass")
+  if(accountNo.value===sess_account && password.value===sess_pass){
+    let confirm =window.confirm("delete your account")
+    if(confirm){
+        fetch(`http://localhost:8080/accounts/${Number(sessionStorage.getItem("AccountId"))}`,{
+            method:"DELETE"
+        })
+        sessionStorage.removeItem("AccountId");
+        sessionStorage.removeItem("AccNo")
+        sessionStorage.removeItem("minBal")
+        sessionStorage.removeItem("intAmt")
+        sessionStorage.removeItem("amount")
+        sessionStorage.removeItem("accountPass")
+        document.getElementById("user_details").innerHTML=` <div id="delete_account_div">
+        
+        <h1 id="getId_error_messane">
+            Please Create your Account
+        </h1>
+       </div>`
+    }
+  }else{
+       if(accountNo!==sess_account){
+        accountNo.style.border="2px solid red"
+       }
+       if(password!==sess_pass){
+        password.style.border="2px solid red"
+       }
+  }
+  
+   
+   
  }
 
  /* ----------------------Payment Account----------------------------------*/
@@ -360,46 +444,197 @@ function eyeclosePasswordDelete(){
     function sendAmountOnclick(){
         let user_details=document.getElementById("user_details")
     user_details.setAttribute("class","User_details_class")
+    let amount=sessionStorage.getItem("amount");
+    if (amount==null) {
+        document.getElementById("user_details").innerHTML=` <div id="send_Amount_Details">
+        
+        <h1 id="send_error_messane">
+            Please Create your Account
+        </h1>
+       </div>`
+    }else{
         document.getElementById("user_details").innerHTML=`<div id="send_Amount_Details">
-        <form action="">
+        <form  onsubmit="sendAmountOnclickfunction()">
             <input type="number" id="send_amount_id" class="send_Amount_inputs" placeholder="Enter Amount"><br><br>
             <input type="password" id="send_amount_pass" class="send_Amount_inputs" placeholder="Enter password"><br><br>
-            <input type="button" id="send_Amount_btn"  value="Send" onclick="sendAmountOnclickfunction()">
+
+            <button id="send_Amount_btn">Send</button>
         </form>
 
      </div>`
     }
+    }
+    function sendAmountOnclickfunction(){
+      event.preventDefault();
+      let amount_Ele=document.getElementById("send_amount_id")
+      let amount=amount_Ele.value
+      amount=Number(amount)
+     
+      let  password_Ele=document.getElementById("send_amount_pass")
+      let password=password_Ele.value
+       let sess_password=sessionStorage.getItem("accountPass")
+       let sess_amount=sessionStorage.getItem("amount")
+       sess_amount=Number(sess_amount)
+       if(amount>0&&password===sess_password){
+          console.log(amount)
+          console.log(typeof sess_amount);
+           if(sess_amount<=amount){
+            window.alert("insufficient Balance please check your balance")
+            }
+           else{
+               let id=sessionStorage.getItem("AccountId")
+             id=Number(id)
+             fetch(`http://localhost:8080/accounts/send?id=${id}&amt=${amount}`,{
+               method:"PATCH"
+             })
+             .then((x)=>x.json())
+             .then((x)=>{
+            sessionStorage.setItem("amount",x.amount)
+             }) 
+             .catch((x)=>{
+                console.log(x);
+                })
+             password_Ele.style.border=""
+            password_Ele.value=""
+             amount_Ele.value=""
+       
+             }
+       }else{
+        console.log(amount);
+        if(amount<=0){
+            if(amount<0){
+                window.alert("Negative values not Validate")
+            }
+            else if(amount===0){
+                window.alert("0 values not Validate")
+            }
+            
+        }
+        
+        if(password===""){
+            alert("Empty String not allowed")
+        }
+       else if(password!==sess_password){
+          password_Ele.style.border="2px solid red"
+        }
+        
+       }
+        
+
+
+    }
 
 
                         /*-----------------Recieve balane-----------------------*/
-          function recieveAmountOnclick(){
+    function recieveAmountOnclick(){
             let user_details=document.getElementById("user_details")
             user_details.setAttribute("class","User_details_class")
+            let amount=sessionStorage.getItem("amount");
+    if (amount==null) {
+        document.getElementById("user_details").innerHTML=` <div id="send_Amount_Details">
+        
+        <h1 id="recieve_error_messane">
+            Please Create your Account
+        </h1>
+       </div>`
+    }else{
             document.getElementById("user_details").innerHTML=`<div id="Recieve_Amount_Details">
-            <form action="">
+            <form  onsubmit="recieveAmountOnclickfunction()">
                 <input type="number" id="recieve_amount_id" class="recieve_Amount_inputs" placeholder="Enter Amount"><br><br>
                 <input type="password" id="recieve_amount_pass" class="recieve_Amount_inputs" placeholder="Enter password"><br><br>
-                <input type="button" id="recieve_Amount_btn"  value="Send" onclick="recieveAmountOnclickfunction()">
+                
+                <button id="recieve_Amount_btn">Send</button>
             </form>
 
          </div>`
+    }
+    
           }      
+
+          function recieveAmountOnclickfunction(){
+          event.preventDefault()
+          let amount_Ele=document.getElementById("recieve_amount_id")
+      let amount=amount_Ele.value
+      amount=Number(amount)
+     
+      let  password_Ele=document.getElementById("recieve_amount_pass")
+      let password=password_Ele.value
+       let sess_password=sessionStorage.getItem("accountPass")
+       if(amount>0&&password===sess_password){
+        let id=sessionStorage.getItem("AccountId")
+        id=Number(id)
+        fetch(`http://localhost:8080/accounts/receive?id=${id}&amt=${amount}`,{
+            method:"PATCH"
+        })
+        .then((x)=>x.json())
+        .then((x)=>{
+            sessionStorage.setItem("amount",x.amount)
+        }) 
+        .catch((x)=>{
+            console.log(x);
+        })
+        password_Ele.style.border=""
+        password_Ele.value=""
+        amount_Ele.value=""
+       }else{
+        console.log(amount);
+        if(amount<=0){
+            if(amount<0){
+                window.alert("Negative values not Validate")
+            }
+            else if(amount===0){
+                window.alert("0 values not Validate")
+            }
+            
+        }
+        
+        if(password===""){
+            alert("Empty String not allowed")
+        }
+       else if(password!==sess_password){
+          password_Ele.style.border="2px solid red"
+        }
+        
+       }
+          
+        }
          /* ----------------------check Balance-------------------------------------*/ 
          function checkBalanceOnclick(){
             let user_details=document.getElementById("user_details")
            user_details.setAttribute("class","User_details_class")
+           let amount=sessionStorage.getItem("amount");
+         if (amount==null) {
+              document.getElementById("user_details").innerHTML=` <div id="send_Amount_Details">
+        
+            <h1 id="check_bal_error_messane">
+            Please Create your Account
+              </h1>
+              </div>`
+           } else{
             document.getElementById("user_details").innerHTML=`<div id="check_Amount_Details">
             <h1 id="check_balance_head">User Details </h1>
             <h1 class="check_Balance_Details">Name:<span class="check_Balance_values"></span></h1>
             <h1 class="check_Balance_Details">Account NO:<span class="check_Balance_values"></span></h1>
             <h1 class="check_Balance_Details">Balance Amount:<span class="check_Balance_values"></span></h1>
             <h1 id="thank">Thank you</h1>
-        </div>`
-        let check_balance=document.getElementsByClassName("check_Balance_values")
-         check_balance[0].textContent=`${localStorage.getItem("name")}`
-         check_balance[1].textContent="SBI********007"
-         check_balance[2].textContent=`${localStorage.getItem("amount")}`
-         }        
+            </div>`
+            let id=sessionStorage.getItem("AccountId")
+             id=Number(id)
+            fetch(`http://localhost:8080/accounts/display/${id}`)
+            .then((x)=>x.json())
+            .then((x)=>{
+             let check_balance=document.getElementsByClassName("check_Balance_values")
+             check_balance[0].textContent=sessionStorage.getItem("name")
+             check_balance[1].textContent=x.accNo
+              check_balance[2].textContent=x.amount
+              })
+              .catch((x)=>{
+                console.log(x);
+              })
+       
+         }   
+
+        }     
           /* ----------------------------User update-------------------------------*/ 
           document.getElementById("update_user").addEventListener('click',()=>{
            let user_details=document.getElementById("user_details")

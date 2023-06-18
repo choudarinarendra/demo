@@ -132,6 +132,12 @@ background-color:rgb(255, 225, 114);
 #update_Account:hover{
     color: green;
 }
+#update_error_messane{
+    color: red;
+    position: relative;
+    top: 110px;
+    font-family: 'Tsukimi Rounded', sans-serif;
+}
 #remove_updateUser{
     position: relative;
     top: -5px;
@@ -148,6 +154,12 @@ background-color:rgb(255, 225, 114);
 /*--------------------------DELETE css-----------------------------*/
 #delete_Account:hover{
   color: green;
+}
+#delete_error_messane{
+    color: red;
+    position: relative;
+    top: 60px;
+    font-family: 'Tsukimi Rounded', sans-serif;
 }
 #delete_account_div{
     position: relative;
@@ -195,6 +207,12 @@ background-color:rgb(255, 225, 114);
     position: relative;
     top: 100px;
 }
+#send_error_messane{
+    color: red;
+    position: relative;
+    top: 10px;
+    font-family: 'Tsukimi Rounded', sans-serif;
+}
 .send_Amount_inputs{
     width: 250px;
     height: 25px;
@@ -214,6 +232,12 @@ background-color:rgb(255, 225, 114);
     position: relative;
     top: 100px;
 }
+#recieve_error_messane{
+    color: red;
+    position: relative;
+    top: 10px;
+    font-family: 'Tsukimi Rounded', sans-serif;
+}
 .recieve_Amount_inputs{
     width: 250px;
     height: 25px;
@@ -231,6 +255,12 @@ background-color:rgb(255, 225, 114);
 #check_Amount_Details{
   position: relative;
   top: 10px;
+}
+#check_bal_error_messane{
+    color: red;
+    position: relative;
+    top: 10px;
+    font-family: 'Tsukimi Rounded', sans-serif;
 }
 .check_Balance_Details{
     color: orange;
