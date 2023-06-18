@@ -1,14 +1,4 @@
-// function registerPage(){
-// window.open("http://127.0.0.1:5500/RegisterPage/registerPage.html")
-// }
-// function submitLogin(e){
-    
-//     e.preventDefault()
-//     // let emailValue=document.getElementById("log_email").value
-//     // let passwordValue=document.getElementById("log_pass").value
-   
-    
-// }
+
 
 let form = document.getElementById("form")
 console.log(form);
@@ -25,11 +15,12 @@ form.addEventListener("submit" , (e) => {
    console.log(json);
    let fe=fetch("http://localhost:8080/users/login",{
         method: "POST", 
-       
+     
         headers: {
             "Content-Type": "application/json",
            
           },
+         
        
           body: json,
        })
