@@ -27,7 +27,6 @@ form.addEventListener("submit" , (e) => {
        fe.then((x)=>x.json())
        .then((x)=>{
         console.log(x);
-         if(x.id!==0&&x.phno!==0&&x.name!==null){
         sessionStorage.setItem("name",x.name)
         sessionStorage.setItem("email",x.email)
         sessionStorage.setItem("password",x.password)
@@ -41,13 +40,12 @@ form.addEventListener("submit" , (e) => {
           sessionStorage.setItem("amount",x.account.amount)
           sessionStorage.setItem("accountPass",x.account.password)
         }
-        window.open("../UserPage/userpage.html")
-         }
-         else{
-          
-         }
+        
+         window.open("../UserPage/userpage.html","_self")
        })
        .catch((x)=>{
-        console.log(x);
+        
+        window.alert("password or email mismatching")
+        
        })
 })

@@ -326,3 +326,7 @@ background-color:rgb(255, 225, 114);
         color: white;
     }
     
+    /*------------------------------------LogoutButton-----------------------------------*/
+    #logout:hover{
+        color: green;
+    }

@@ -407,10 +407,11 @@ function eyeclosePassword() {
        </div>`
     }
   }else{
-       if(accountNo!==sess_account){
+       if(accountNo.value!==sess_account){
         accountNo.style.border="2px solid red"
+        
        }
-       if(password!==sess_pass){
+       if(password.value!==sess_pass){
         password.style.border="2px solid red"
        }
   }
@@ -878,3 +879,11 @@ function eyeclosePassword() {
            let openEye=document.getElementById("conform_close")
            openEye.setAttribute("class","fa-solid fa-eye")
      }
+
+
+     /*-------------------------------LogoutButton----------------------------*/
+     document.getElementById("logout").addEventListener("click",()=>{
+        sessionStorage.clear();
+      window.open("../Homepage/homepage.html","_self")
+
+     })
